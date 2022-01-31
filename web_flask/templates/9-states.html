@@ -1,26 +1,31 @@
-#!/usr/bin/python3
-"""
-This script that starts a Flask web application
-"""
+<!DOCTYPE html>
+<HTML lang="en">
 
-from flask import Flask, render_template
-from models import *
-from models.state import State
-app = Flask(__name__)
+<HEAD>
+    <TITLE>HBNB</TITLE>
+</HEAD>
 
+<BODY>
+    {% if no_found == True %}
+    <H1>Not found!</H1>
+    {% else %}
+    {% if id == False %}
+    <H1>States</H1>
+    <UL>
+        {% for state in states.values()|sort(attribute="name") %}
+        <LI>{{ state.id }}: <B>{{ state.name }}</B></LI>
+        {% endfor %}
+    </UL>
+    {% else %}
+    <H1>State: {{ states.name }}</H1>
+    <H3>Cities:</H3>
+    {% endif %}
+    <UL>
+        {% for city in states.cities|sort(attribute="name") %}
+        <LI>{{ city.id }}: <B>{{ city.name }}</B></LI>
+        {% endfor %}
+    </UL>
+    {% endif %}
+</BODY>
 
-@app.teardown_appcontext
-def teardown_data(self):
-    """ Data from source """
-    storage.close()
-
-
-@app.route('/cities_by_states', strict_slashes=False)
-def cities_by_states():
-    """ /cities_by_states path """
-    states = storage.all(State)
-    return render_template('8-cities_by_states.html', states=states)
-
-
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+</HTML>
